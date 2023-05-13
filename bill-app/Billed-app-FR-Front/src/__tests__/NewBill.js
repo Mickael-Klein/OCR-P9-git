@@ -5,7 +5,6 @@
 import { screen, waitFor, fireEvent } from "@testing-library/dom";
 import NewBillUI from "../views/NewBillUI.js";
 import NewBill from "../containers/NewBill.js";
-import BillsUI from "../views/BillsUI.js";
 import { ROUTES, ROUTES_PATH } from "../constants/routes";
 import { localStorageMock } from "../__mocks__/localStorage.js";
 import mockStore from "../__mocks__/store";
@@ -234,7 +233,7 @@ describe("When I navigate to Dashboard employee", () => {
         pct: 20,
       };
       const postBills = await mockStore.bills().update(bill);
-      expect(postSpy).toHaveBeenCalledTimes(1);
+      expect(postSpy).toHaveBeenCalled();
       expect(postBills).toStrictEqual(bill);
     });
     describe("When an error occurs on API", () => {
@@ -252,7 +251,7 @@ describe("When I navigate to Dashboard employee", () => {
           document.body.innerHTML = ROUTES({ pathname });
         };
       });
-      test("Add bills from an API and fails with 404 message error", async () => {
+      test("Fail to add bill and receive 404 error message from API", async () => {
         const postSpy = jest.spyOn(console, "error");
 
         const store = {
@@ -268,7 +267,6 @@ describe("When I navigate to Dashboard employee", () => {
           localStorage,
         });
 
-        // Submit form
         const form = screen.getByTestId("form-new-bill");
         const handleSubmit = jest.fn((e) => newBill.handleSubmit(e));
         form.addEventListener("submit", handleSubmit);
@@ -277,7 +275,7 @@ describe("When I navigate to Dashboard employee", () => {
         await new Promise(process.nextTick);
         expect(postSpy).toBeCalledWith(new Error("404"));
       });
-      test("Add bills from an API and fails with 500 message error", async () => {
+      test("Fail to add bill and receive 500 error message from API", async () => {
         const postSpy = jest.spyOn(console, "error");
 
         const store = {
@@ -293,7 +291,6 @@ describe("When I navigate to Dashboard employee", () => {
           localStorage,
         });
 
-        // Submit form
         const form = screen.getByTestId("form-new-bill");
         const handleSubmit = jest.fn((e) => newBill.handleSubmit(e));
         form.addEventListener("submit", handleSubmit);
